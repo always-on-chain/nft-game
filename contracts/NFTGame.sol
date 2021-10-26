@@ -47,4 +47,22 @@ contract NFTGame is ERC721 {
       }
       _tokenIds.increment();
   }
+
+  function mintCharacterNFT(uint _characterIndex) external {
+    uint256 newItemId = _tokenIds.current();
+    
+    _safeMint(msg.sender, newItemId);
+    nftHolderAttributes[newItemId] = CharacterAttributes({
+      characterIndex: _characterIndex,
+      name: defaultCharacters[_characterIndex].name,
+      imageURI: defaultCharacters[_characterIndex].imageURI,
+      hp: defaultCharacters[_characterIndex].hp,
+      maxHp: defaultCharacters[_characterIndex].hp,
+      attackDamage: defaultCharacters[_characterIndex].attackDamage
+    });
+    console.log("Minted NFT w/ tokenId %s and characterIndex %s", newItemId, _characterIndex);
+
+    nftHolders[msg.sender] = newItemId;
+    _tokenIds.increment();
+  }
 }
