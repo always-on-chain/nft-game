@@ -17,7 +17,15 @@ contract NFTGame is ERC721 {
     uint maxHp;
     uint attackDamage; 
   } 
+  struct BigBoss {
+    string name;
+    string imageURI;
+    uint hp;
+    uint maxHp;
+    uint attackDamage;
+  }
   CharacterAttributes[] defaultCharacters;
+  BigBoss public bigBoss;
   using Counters for Counters.Counter;
   // The tokenId is the NFTs unique identifier
   Counters.Counter private _tokenIds;
@@ -30,10 +38,24 @@ contract NFTGame is ERC721 {
     string[] memory characterNames,
     string[] memory characterImageURIs,
     uint[] memory characterHp,
-    uint[] memory characterAttackDmg
+    uint[] memory characterAttackDmg,
+    string memory bossName,
+    string memory bossImageURI,
+    uint bossHp,
+    uint bossAttackDamage
     )    
     ERC721("Heros", "HERO") 
     {
+      bigBoss = BigBoss({
+        name: bossName,
+        imageURI: bossImageURI,
+        hp: bossHp,
+        maxHp: bossHp,
+        attackDamage: bossAttackDamage
+      });
+
+      console.log("Done initializing boss %s w/ HP %s, img %s", bigBoss.name, bigBoss.hp, bigBoss.imageURI);
+      
       for (uint i = 0; i < characterNames.length; i++) {
         defaultCharacters.push(CharacterAttributes({
           characterIndex: i,
