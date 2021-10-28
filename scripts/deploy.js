@@ -8,11 +8,20 @@ const main = async () => {
   ];
   const characterHp = [100, 200, 300];
   const characterAttackDmg = [100, 50, 25];
+  const bossName = 'Big Boss';
+  const bossImageURI =
+    'https://cdn.pixabay.com/photo/2019/10/24/19/48/games-4575111_1280.png';
+  const bossHp = 10000;
+  const bossAttackDamage = 50;
   const gameContract = await gameContractFactory.deploy(
     characterNames,
     characterImageURIs,
     characterHp,
-    characterAttackDmg
+    characterAttackDmg,
+    bossName,
+    bossImageURI,
+    bossHp,
+    bossAttackDamage
   );
   await gameContract.deployed();
   console.log('Contract deployed to:', gameContract.address);
