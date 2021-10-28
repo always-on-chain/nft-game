@@ -55,7 +55,7 @@ contract NFTGame is ERC721 {
       });
 
       console.log("Done initializing boss %s w/ HP %s, img %s", bigBoss.name, bigBoss.hp, bigBoss.imageURI);
-      
+
       for (uint i = 0; i < characterNames.length; i++) {
         defaultCharacters.push(CharacterAttributes({
           characterIndex: i,
@@ -117,5 +117,33 @@ contract NFTGame is ERC721 {
     );
 
     return output;
+  }
+
+  function attackBoss() public {
+    // Get the state of the player's NFT.
+    uint256 nftTokenIdOfPlayer = nftHolders[msg.sender];
+    CharacterAttributes storage player = nftHolderAttributes[nftTokenIdOfPlayer];
+    console.log("\nPlayer w/ character %s about to attack. Has %s HP and %s AD", player.name, player.hp, player.attackDamage);
+    console.log("Boss %s has %s HP and %s AD", bigBoss.name, bigBoss.hp, bigBoss.attackDamage);
+    // Make sure the player has more than 0 HP.
+    require(player.hp > 0, "Error: character must have HP to attack boss");
+    // Make sure the boss has more than 0 HP.
+    require(bigBoss.hp > 0, "Error: boss must have HP to attack character");
+    // Allow player to attack boss.
+    if (bigBoss.hp < player.attackDamage) {
+      // Need to set to 0 because uints cannot handle negative numbers
+      bigBoss.hp = 0;
+    } else {
+      bigBoss.hp -= player.attackDamage;
+    }
+    console.log("Player attacked boss. New boss hp: ", bigBoss.hp);
+    // Allow boss to attack player.
+    if (player.hp < bigBoss.attackDamage) {
+      // Need to set to 0 because uints cannot handle negative numbers
+      player.hp = 0;
+    } else {
+      player.hp -= bigBoss.attackDamage;
+    }
+    console.log("Boss attacked player. New player hp: %s\n", player.hp);
   }
 }
